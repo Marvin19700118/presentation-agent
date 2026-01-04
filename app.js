@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const agent = agents[i];
             updateSidebarStatus(agent.id, 'active');
             try {
-                const response = await fetch('http://localhost:5000/api/agent', {
+                const response = await fetch('/api/agent', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generateFinalBtn.disabled = true;
         generateFinalBtn.textContent = '規劃中...';
         try {
-            const response = await fetch('http://localhost:5000/api/final_report', {
+            const response = await fetch('/api/final_report', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

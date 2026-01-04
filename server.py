@@ -1,22 +1,27 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
 
 load_dotenv()
 
-app = Flask(__name__)
+# Specify the static folder as the current directory to serve index.html, app.js, etc.
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 # Configure Gemini
 api_key = os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=api_key)
+if api_key:
+    genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-2.0-flash')
+
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/agent', methods=['POST'])
 def run_agent():
-    # ... (existing code remains same)
     data = request.json
     agent_id = data.get('agent_id')
     agent_name = data.get('agent_name')
@@ -87,4 +92,6 @@ def generate_final():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    # Use environment variable for port, defaulting to 5000 for local dev
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
