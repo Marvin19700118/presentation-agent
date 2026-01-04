@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentDeck | AI 商業簡報腦力激盪</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <meta name="description" content="利用 Multi-Agent 多代理人架構，為您打造完美的商業簡報構想。">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="logo">
+                <span class="logo-icon">▲</span>
+                <h1>AgentDeck</h1>
+            </div>
+            <button id="menu-toggle" class="menu-toggle">☰</button>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">▲</span>
+                <h1>AgentDeck</h1>
+            </div>
+            <nav class="agent-list" id="agentList">
+                <div class="agent-item active" id="home-tab">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">🏠 回到首頁 (Home)</span>
+                </div>
+                <div class="separator"></div>
+                <div class="agent-item" data-agent="input">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">背景設定</span>
+                </div>
+                <div class="agent-item" data-agent="strategist">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">戰略顧問</span>
+                </div>
+                <div class="agent-item" data-agent="storyteller">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">敘事架構師</span>
+                </div>
+                <div class="agent-item" data-agent="researcher">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">市場研究員</span>
+                </div>
+                <div class="agent-item" data-agent="critic">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">終極批判者</span>
+                </div>
+                <div class="agent-item" data-agent="designer">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">視覺創意總監</span>
+                </div>
+                <div class="separator"></div>
+                <div class="agent-item" id="history-tab">
+                    <span class="status-dot"></span>
+                    <span class="agent-name">📜 歷史紀錄</span>
+                </div>
+            </nav>
+            <div class="user-info">
+                <div class="avatar">M</div>
+                <div class="details">
+                    <p class="name">使用者</p>
+                    <p class="role">簡報發起人</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <section id="step-input" class="view">
+                <header class="view-header">
+                    <h2>開始您的簡報計畫</h2>
+                    <p>提供核心背景，讓 Multi-Agent 團隊為您服務。</p>
+                </header>
+
+                <div class="form-container">
+                    <div class="input-group">
+                        <label for="topic">演講主題摘要</label>
+                        <textarea id="topic" placeholder="例：向投資人介紹我們的 AI 醫療診斷系統，強調準確度與商用價值..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="audience">受眾特質</label>
+                        <textarea id="audience" placeholder="例：創投合夥人、醫院負責人。他們重視 ROI、風險控管，且對技術細節較敏感..."></textarea>
+                    </div>
+
+                    <div class="main-actions">
+                        <button id="start-brainstorm" class="primary-btn">啟動腦力激盪 🚀</button>
+                        <button id="show-history-main" class="secondary-btn">📜 查看歷史紀錄</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-process" class="view hidden">
+                <header class="view-header">
+                    <h2>Agent 協作中...</h2>
+                    <p id="process-subtitle">團隊正在深入分析您的需求。</p>
+                </header>
+
+                <div class="war-room" id="warRoom">
+                    <!-- Agent messages will be injected here -->
+                </div>
+
+                <div class="action-bar hidden" id="finalActions">
+                    <button class="secondary-btn" onclick="location.reload()">重新開始</button>
+                    <button id="prep-presentation-btn" class="primary-btn">轉化為完整簡報 ✍️</button>
+                </div>
+            </section>
+
+            <!-- Pre-Presentation Dialog -->
+            <section id="step-config" class="view hidden">
+                <header class="view-header">
+                    <h2>自訂簡報規格</h2>
+                    <p>根據腦力激盪結果，設定您的簡報規模。</p>
+                </header>
+                <div class="form-container">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="duration">預計演講時長 (分鐘)</label>
+                            <input type="number" id="duration" value="10" min="2" max="60">
+                        </div>
+                        <div class="input-group">
+                            <label for="slides">預計簡報頁數 (建議一頁 2 分鐘)</label>
+                            <input type="number" id="slides" value="5" min="1">
+                        </div>
+                    </div>
+                    <button id="generate-final-btn" class="primary-btn">產出完整簡報內容 🚀</button>
+                    <button class="text-btn"
+                        onclick="document.getElementById('step-config').classList.add('hidden'); document.getElementById('step-process').classList.remove('hidden');">返回討論紀錄</button>
+                </div>
+            </section>
+
+            <!-- Final Report View -->
+            <section id="step-final" class="view hidden">
+                <header class="view-header">
+                    <h2>您的完整簡報專案</h2>
+                    <p>每一頁都經過 AI 優化，符合您的時間配置。</p>
+                </header>
+                <div id="final-deck-container" class="final-deck">
+                    <!-- Slides will be injected here -->
+                </div>
+                <div class="action-bar">
+                    <button class="secondary-btn" onclick="location.reload()">重新開始</button>
+                    <div class="export-options">
+                        <button id="export-md-btn" class="primary-btn">匯出 Markdown</button>
+                        <button id="export-gs-btn" class="accent-btn">下載 PowerPoint (.pptx)</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History View -->
+            <section id="step-history" class="view hidden">
+                <header class="view-header">
+                    <h2>歷史紀錄</h2>
+                    <p>回顧過往的腦力激盪成果與簡報規劃。</p>
+                </header>
+                <div id="history-list" class="history-list">
+                    <!-- History items will be injected here -->
+                </div>
+                <button class="secondary-btn"
+                    onclick="document.getElementById('step-history').classList.add('hidden'); document.getElementById('step-input').classList.remove('hidden');">返回首頁</button>
+            </section>
+        </main>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
